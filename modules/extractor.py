@@ -10,7 +10,7 @@ def extract_text(file_path):
     for script in soup(["script", "style"]):
         script.decompose()
 
-    text = soup.get_text()
+    text = soup.get_text(separator=" ")
 
     # Clean text
     lines = [line.strip() for line in text.splitlines()]
