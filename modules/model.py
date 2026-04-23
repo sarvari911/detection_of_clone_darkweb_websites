@@ -1,6 +1,8 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.ensemble import RandomForestClassifier
+import joblib
+import os
 
 
 # -------------------------
@@ -17,10 +19,8 @@ def text_similarity(text1, text2):
 # -------------------------
 def tag_similarity(tags1, tags2):
     all_tags = set(tags1.keys()).union(set(tags2.keys()))
-
     v1 = [tags1.get(tag, 0) for tag in all_tags]
     v2 = [tags2.get(tag, 0) for tag in all_tags]
-
     return cosine_similarity([v1], [v2])[0][0]
 
 
@@ -34,14 +34,11 @@ def link_similarity(links1, links2):
     if not set1 and not set2:
         return 0
 
-    intersection = len(set1.intersection(set2))
-    union = len(set1.union(set2))
-
-    return intersection / union
+    return len(set1 & set2) / len(set1 | set2)
 
 
 # -------------------------
-# FINAL SCORE (Weighted)
+# FINAL SCORE (Rule-Based)
 # -------------------------
 def compute_final_score(data1, data2):
     text_score = text_similarity(data1["text"], data2["text"])
@@ -64,31 +61,53 @@ def compute_final_score(data1, data2):
 
 
 # -------------------------
-# ML MODEL (Demo)
+# TRAIN MODEL (runs once)
 # -------------------------
-def train_dummy_model():
+def train_model():
     X = [
-        [0.9, 0.8, 0.7],
-        [0.85, 0.75, 0.6],
-        [0.6, 0.5, 0.4],
-        [0.4, 0.3, 0.2],
-        [0.2, 0.1, 0.1]
+        [0.92, 0.85, 0.80],
+        [0.88, 0.82, 0.75],
+        [0.70, 0.65, 0.60],
+        [0.60, 0.50, 0.40],
+        [0.40, 0.35, 0.30],
+        [0.30, 0.25, 0.20],
+        [0.20, 0.15, 0.10]
     ]
 
-    y = [1, 1, 1, 0, 0]
+    y = [1, 1, 1, 0, 0, 0, 0]
 
-    model = RandomForestClassifier()
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X, y)
 
+    joblib.dump(model, "model.pkl")
     return model
 
 
+# -------------------------
+# LOAD MODEL
+# -------------------------
+def load_model():
+    if os.path.exists("model.pkl"):
+        return joblib.load("model.pkl")
+    else:
+        return train_model()
+
+
+# -------------------------
+# ML PREDICTION
+# -------------------------
 def predict_with_ml(data1, data2):
     text_score = text_similarity(data1["text"], data2["text"])
     tag_score = tag_similarity(data1["tag_freq"], data2["tag_freq"])
     link_score = link_similarity(data1["links"], data2["links"])
 
-    model = train_dummy_model()
+    model = load_model()
+
     prediction = model.predict([[text_score, tag_score, link_score]])[0]
 
-    return prediction
+    # probability of being clone (class 1)
+    probability = model.predict_proba(
+        [[text_score, tag_score, link_score]]
+    )[0][1]
+
+    return prediction, probability
