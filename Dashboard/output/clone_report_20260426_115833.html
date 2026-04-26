@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clone Detection Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #eee; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { background: #16213e; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #e94560; font-size: 28px; }
+        .header p { color: #aaa; margin-top: 5px; }
+        .card { background: #16213e; padding: 25px; border-radius: 10px; margin-bottom: 20px; }
+        .card h2 { color: #e94560; margin-bottom: 15px; font-size: 20px; }
+        .sites { display: flex; gap: 20px; }
+        .site { flex: 1; background: #0f3460; padding: 20px; border-radius: 8px; }
+        .site.original { border-left: 4px solid #28a745; }
+        .site.suspect { border-left: 4px solid #dc3545; }
+        .site h3 { margin-bottom: 10px; }
+        .site p { color: #ccc; font-size: 14px; margin: 5px 0; }
+        .verdict { text-align: center; padding: 20px; font-size: 24px; font-weight: bold; border-radius: 8px; margin: 20px 0; }
+        .verdict.clone { background: #dc354533; color: #dc3545; border: 2px solid #dc3545; }
+        .verdict.safe { background: #28a74533; color: #28a745; border: 2px solid #28a745; }
+        .score { font-size: 48px; font-weight: bold; text-align: center; }
+        .risk-badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #0f3460; }
+        th { color: #e94560; font-size: 14px; }
+        td { font-size: 14px; color: #ccc; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕵️ Dark Web Clone Detection Report</h1>
+            <p>Generated: 2026-04-26 11:58:33</p>
+        </div>
+        
+        <div class="card">
+            <h2>📡 Sites Analyzed</h2>
+            <div class="sites">
+                <div class="site original">
+                    <h3>🔵 Original Site</h3>
+                    <p><strong>URL:</strong> https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswz...</p>
+                    <p><strong>Title:</strong> DuckDuckGo - Protection. Privacy. Peace of mind.</p>
+                    <p><strong>Size:</strong> 161,951 chars</p>
+                    <p><strong>Response:</strong> 11.14s</p>
+                </div>
+                <div class="site suspect">
+                    <h3>🔴 Suspect Site</h3>
+                    <p><strong>URL:</strong> http://2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53...</p>
+                    <p><strong>Title:</strong> Tor Project | Anonymity Online</p>
+                    <p><strong>Size:</strong> 23,012 chars</p>
+                    <p><strong>Response:</strong> 7.53s</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="text-align:center;">
+            <h2>🔍 Detection Result</h2>
+            <div class="score" style="color: #28a745;">15.7%</div>
+            <p style="color:#aaa;">Similarity Score</p>
+            <div class="verdict safe">
+                LOW RISK - ✅ Different Sites
+            </div>
+            <span class="risk-badge" style="background:#28a745; color:white;">
+                LOW
+            </span>
+            <p style="margin-top:15px; color:#ccc;">Sites appear to be structurally different.</p>
+        </div>
+        
+        <div class="card">
+            <h2>📊 Feature Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Indicator</th>
+                        <th>Feature</th>
+                        <th>Score</th>
+                        <th>Weight</th>
+                        <th>Contribution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td>🟡 MED</td>
+                <td>Page depth match</td>
+                <td>63.2%</td>
+                <td>10%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#fd7e14; width:6%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    6.3%
+                </td>
+            </tr>
+            <tr>
+                <td>🔴 HIGH</td>
+                <td>Hidden elements match</td>
+                <td>100.0%</td>
+                <td>5%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#fd7e14; width:5%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    5.0%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>Form fields match</td>
+                <td>16.7%</td>
+                <td>20%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:3%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    3.3%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>Meta tags match</td>
+                <td>21.2%</td>
+                <td>5%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:1%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    1.1%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>HTML structure match</td>
+                <td>0.0%</td>
+                <td>25%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:0%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    0.0%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>CSS classes/IDs match</td>
+                <td>0.0%</td>
+                <td>15%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:0%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    0.0%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>JavaScript files match</td>
+                <td>0.0%</td>
+                <td>10%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:0%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    0.0%
+                </td>
+            </tr>
+            <tr>
+                <td>🟢 LOW</td>
+                <td>Navigation links match</td>
+                <td>0.0%</td>
+                <td>10%</td>
+                <td>
+                    <div style="background:#e9ecef; border-radius:4px; height:20px;">
+                        <div style="background:#28a745; width:0%; height:100%; border-radius:4px;"></div>
+                    </div>
+                    0.0%
+                </td>
+            </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            Dark Web Clone Detection System v1.0 | Generated for academic research purposes
+        </div>
+    </div>
+</body>
+</html>

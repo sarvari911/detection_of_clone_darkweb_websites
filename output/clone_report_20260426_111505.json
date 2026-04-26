@@ -1,0 +1,70 @@
+ex{
+  "report_metadata": {
+    "generated_at": "2026-04-26 11:15:05",
+    "tool": "Dark Web Clone Detection System",
+    "version": "1.0.0"
+  },
+  "sites_analyzed": {
+    "original": {
+      "url": "http://originalbank.onion",
+      "title": "Original Bank - Secure Login",
+      "response_time": 3.45,
+      "page_size": 45231
+    },
+    "suspect": {
+      "url": "http://fakebank.onion",
+      "title": "Bank Login - Verify Account",
+      "response_time": 5.21,
+      "page_size": 44890
+    }
+  },
+  "detection_result": {
+    "is_clone": true,
+    "similarity_score": 0.92,
+    "threshold": 0.85,
+    "verdict": "⚠️ CLONE DETECTED",
+    "breakdown": [
+      {
+        "indicator": "🔴 HIGH",
+        "explanation": "HTML structure match",
+        "raw_score": 1.0,
+        "weight": 0.25,
+        "weighted_score": 0.25
+      },
+      {
+        "indicator": "🔴 HIGH",
+        "explanation": "Form fields match",
+        "raw_score": 0.95,
+        "weight": 0.2,
+        "weighted_score": 0.19
+      },
+      {
+        "indicator": "🔴 HIGH",
+        "explanation": "CSS classes/IDs match",
+        "raw_score": 0.9,
+        "weight": 0.15,
+        "weighted_score": 0.135
+      },
+      {
+        "indicator": "🟡 MED",
+        "explanation": "JavaScript files match",
+        "raw_score": 0.7,
+        "weight": 0.1,
+        "weighted_score": 0.07
+      },
+      {
+        "indicator": "🟢 LOW",
+        "explanation": "Meta tags match",
+        "raw_score": 0.3,
+        "weight": 0.05,
+        "weighted_score": 0.015
+      }
+    ]
+  },
+  "summary": {
+    "risk_level": "CRITICAL",
+    "is_clone": true,
+    "similarity": "92.0%",
+    "message": "Almost identical structure detected. This is very likely a clone."
+  }
+}

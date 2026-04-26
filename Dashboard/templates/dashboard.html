@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Clone Detection Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+        
+        .sidebar { position: fixed; left: 0; top: 0; width: 250px; height: 100%; background: #161b22; border-right: 1px solid #30363d; padding: 20px; }
+        .sidebar h2 { color: #58a6ff; margin-bottom: 30px; font-size: 20px; }
+        .sidebar .nav-item { padding: 12px 15px; margin: 5px 0; border-radius: 8px; cursor: pointer; transition: 0.3s; color: #8b949e; }
+        .sidebar .nav-item:hover, .sidebar .nav-item.active { background: #1f2937; color: #58a6ff; }
+        .sidebar .status { margin-top: 30px; padding: 10px; border-radius: 8px; background: #1f2937; text-align: center; }
+        .status.online { color: #3fb950; }
+        .status.offline { color: #f85149; }
+        
+        .main { margin-left: 250px; padding: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; color: #58a6ff; }
+        
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        .card h3 { color: #58a6ff; margin-bottom: 20px; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #8b949e; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #c9d1d9; font-size: 14px; }
+        
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .btn-primary { background: #238636; color: white; }
+        .btn-primary:hover { background: #2ea043; }
+        .btn-danger { background: #da3633; color: white; }
+        .btn-blue { background: #1f6feb; color: white; }
+        .btn-blue:hover { background: #388bfd; }
+        
+        .result-box { padding: 20px; border-radius: 10px; margin: 15px 0; text-align: center; }
+        .result-box.clone { background: #da363322; border: 2px solid #da3633; }
+        .result-box.safe { background: #3fb95022; border: 2px solid #3fb950; }
+        
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 20px auto; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #30363d; }
+        th { color: #58a6ff; font-size: 13px; }
+        td { font-size: 14px; }
+        
+        .loading { display: none; text-align: center; padding: 40px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #30363d; border-top: 4px solid #58a6ff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 15px; font-size: 12px; font-weight: 600; margin: 2px; }
+        .tag-high { background: #da363333; color: #f85149; }
+        .tag-medium { background: #d2992233; color: #d29922; }
+        .tag-low { background: #3fb95033; color: #3fb950; }
+        
+        .bar-container { background: #21262d; border-radius: 8px; height: 8px; margin-top: 5px; }
+        .bar-fill { height: 100%; border-radius: 8px; transition: width 0.5s; }
+    </style>
+</head>
+<body>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🕵️ Clone Detector</h2>
+        <div class="nav-item active" onclick="showPage('crawl')">📡 Crawl & Compare</div>
+        <div class="nav-item" onclick="showPage('saved')">💾 Saved Pages</div>
+        <div class="nav-item" onclick="showPage('history')">📊 History</div>
+        <div class="status" id="torStatus">
+            Checking Tor...
+            <div class="spinner" style="width:20px;height:20px;margin-top:10px;"></div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main">
+        <div class="header">
+            <h1>Dark Web Clone Detection</h1>
+            <span style="color:#8b949e;" id="currentTime"></span>
+        </div>
+        
+        <!-- Crawl & Compare Page -->
+        <div class="page-section active" id="page-crawl">
+            <div class="card">
+                <h3>🔍 Compare Two .onion Sites</h3>
+                <div class="input-group">
+                    <label>Original Site URL</label>
+                    <input type="text" id="url1" placeholder="https://example.onion/">
+                </div>
+                <div class="input-group">
+                    <label>Suspected Clone URL</label>
+                    <input type="text" id="url2" placeholder="https://suspicious.onion/">
+                </div>
+                <button class="btn btn-blue" onclick="compareLive()">🔍 Start Detection</button>
+                <button class="btn btn-primary" onclick="crawlSingle()" style="margin-left:10px;">📡 Crawl Only</button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top:15px; color:#8b949e;">Crawling .onion sites through Tor...</p>
+                    <p style="color:#8b949e;">This may take 30-60 seconds</p>
+                </div>
+                
+                <div id="liveResult"></div>
+            </div>
+        </div>
+        
+        <!-- Saved Pages Page -->
+        <div class="page-section" id="page-saved">
+            <div class="card">
+                <h3>💾 Compare Saved Pages</h3>
+                <div class="input-group">
+                    <label>Original Page</label>
+                    <select id="savedFile1">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Suspected Clone Page</label>
+                    <select id="savedFile2">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <button class="btn btn-blue" onclick="compareSaved()">🔍 Compare Saved</button>
+                <div id="savedResult"></div>
+            </div>
+        </div>
+        
+        <!-- History Page -->
+        <div class="page-section" id="page-history">
+            <div class="card">
+                <h3>📊 Detection History</h3>
+                <div id="historyList">
+                    <p style="color:#8b949e;">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check Tor status on load
+        fetch('/api/status')
+            .then(r => r.json())
+            .then(data => {
+                const statusDiv = document.getElementById('torStatus');
+                if (data.tor_running) {
+                    statusDiv.innerHTML = '🟢 Tor Connected<br><small>Port 9150</small>';
+                    statusDiv.className = 'status online';
+                } else {
+                    statusDiv.innerHTML = '🔴 Tor Offline<br><small>Open Tor Browser!</small>';
+                    statusDiv.className = 'status offline';
+                }
+            });
+        
+        // Update time
+        setInterval(() => {
+            document.getElementById('currentTime').textContent = new Date().toLocaleString();
+        }, 1000);
+        
+        // Page navigation
+        function showPage(page) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (page === 'saved') loadSavedPages();
+            if (page === 'history') loadHistory();
+        }
+        
+        // Load saved pages
+        function loadSavedPages() {
+            fetch('/api/saved-pages')
+                .then(r => r.json())
+                .then(data => {
+                    let options = '<option value="">Select a page...</option>';
+                    data.pages.forEach(p => {
+                        options += `<option value="${p.file}">${p.title ? p.title.substring(0,80) : p.url.substring(0,80)} (${p.size} chars)</option>`;
+                    });
+                    document.getElementById('savedFile1').innerHTML = options;
+                    document.getElementById('savedFile2').innerHTML = options;
+                });
+        }
+        
+        // Compare live sites
+        function compareLive() {
+            const url1 = document.getElementById('url1').value.trim();
+            const url2 = document.getElementById('url2').value.trim();
+            
+            if (!url1 || !url2) { alert('Enter both URLs!'); return; }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('liveResult').innerHTML = '';
+            
+            fetch('/api/compare', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url1, url2})
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                if (data.error) {
+                    document.getElementById('liveResult').innerHTML = `<p style="color:#f85149;">❌ ${data.error}</p>`;
+                } else {
+                    document.getElementById('liveResult').innerHTML = buildResultHTML(data);
+                }
+            });
+        }
+        
+        // Compare saved pages
+        function compareSaved() {
+            const file1 = document.getElementById('savedFile1').value;
+            const file2 = document.getElementById('savedFile2').value;
+            
+            if (!file1 || !file2) { alert('Select both files!'); return; }
+            
+            document.getElementById('savedResult').innerHTML = '<div class="loading" style="display:block;"><div class="spinner"></div><p>Comparing...</p></div>';
+            
+            fetch('/api/compare-saved', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({file1, file2})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('savedResult').innerHTML = `<p style="color:#f85149;">❌ ${data.error}</p>`;
+                } else {
+                    document.getElementById('savedResult').innerHTML = buildResultHTML(data);
+                }
+            });
+        }
+        
+        // Build result HTML
+        function buildResultHTML(data) {
+            const score = (data.similarity_score * 100).toFixed(1);
+            const isClone = data.is_clone;
+            const color = isClone ? '#f85149' : '#3fb950';
+            
+            let breakdownHTML = '';
+            if (data.breakdown) {
+                data.breakdown.slice(0,8).forEach(item => {
+                    const pct = (item.weighted_score * 100).toFixed(1);
+                    const barColor = item.weighted_score > 0.1 ? '#f85149' : item.weighted_score > 0.05 ? '#d29922' : '#3fb950';
+                    breakdownHTML += `
+                        <tr>
+                            <td>${item.explanation}</td>
+                            <td>${(item.raw_score * 100).toFixed(0)}%</td>
+                            <td>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width:${pct}%; background:${barColor};"></div>
+                                </div>
+                            </td>
+                            <td>${pct}%</td>
+                        </tr>`;
+                });
+            }
+            
+            return `
+                <div class="result-box ${isClone ? 'clone' : 'safe'}">
+                    <h2 style="color:${color};">${data.verdict}</h2>
+                    <div class="score-circle" style="background:${color}22; color:${color}; border:3px solid ${color};">
+                        ${score}%
+                    </div>
+                    <p style="color:#8b949e;">Similarity Score</p>
+                    <span class="tag ${data.risk_level === 'CRITICAL' || data.risk_level === 'HIGH' ? 'tag-high' : data.risk_level === 'MEDIUM' ? 'tag-medium' : 'tag-low'}">${data.risk_level} RISK</span>
+                </div>
+                
+                <div style="margin-top:20px;">
+                    <h4 style="color:#58a6ff; margin-bottom:10px;">📊 Feature Breakdown</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Feature</th><th>Score</th><th>Contribution</th><th>Weight</th></tr>
+                        </thead>
+                        <tbody>${breakdownHTML}</tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top:20px; display:flex; gap:10px;">
+                    <div style="flex:1; padding:15px; background:#1f2937; border-radius:8px;">
+                        <p style="color:#8b949e; font-size:12px;">Original</p>
+                        <p style="color:#58a6ff;">${data.original_title ? data.original_title.substring(0,60) : 'N/A'}</p>
+                    </div>
+                    <div style="flex:1; padding:15px; background:#1f2937; border-radius:8px;">
+                        <p style="color:#8b949e; font-size:12px;">Suspect</p>
+                        <p style="color:#f85149;">${data.suspect_title ? data.suspect_title.substring(0,60) : 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Load history
+        function loadHistory() {
+            fetch('/api/history')
+                .then(r => r.json())
+                .then(data => {
+                    let html = '';
+                    if (data.results.length === 0) {
+                        html = '<p style="color:#8b949e;">No detection history yet.</p>';
+                    } else {
+                        html = '<table><thead><tr><th>Date</th><th>Original</th><th>Suspect</th><th>Score</th><th>Verdict</th></tr></thead><tbody>';
+                        data.results.forEach(r => {
+                            const color = r.is_clone ? '#f85149' : '#3fb950';
+                            html += `
+                                <tr>
+                                    <td>${r.date}</td>
+                                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${r.original_url}</td>
+                                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${r.suspect_url}</td>
+                                    <td style="color:${color};font-weight:bold;">${(r.score*100).toFixed(0)}%</td>
+                                    <td>${r.verdict}</td>
+                                </tr>`;
+                        });
+                        html += '</tbody></table>';
+                    }
+                    document.getElementById('historyList').innerHTML = html;
+                });
+        }
+        
+        // Crawl single site
+        function crawlSingle() {
+            const url = document.getElementById('url1').value.trim() || document.getElementById('url2').value.trim();
+            if (!url) { alert('Enter a URL first!'); return; }
+            
+            document.getElementById('loading').style.display = 'block';
+            
+            fetch('/api/crawl', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url})
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('Crawled successfully!\nTitle: ' + data.title + '\nSize: ' + data.size + ' chars');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

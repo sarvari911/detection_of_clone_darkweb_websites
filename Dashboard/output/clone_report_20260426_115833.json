@@ -1,0 +1,109 @@
+{
+  "report_metadata": {
+    "generated_at": "2026-04-26 11:58:33",
+    "tool": "Dark Web Clone Detection System",
+    "version": "1.0.0"
+  },
+  "sites_analyzed": {
+    "original": {
+      "url": "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/",
+      "title": "DuckDuckGo - Protection. Privacy. Peace of mind.",
+      "response_time": 11.14,
+      "page_size": 161951
+    },
+    "suspect": {
+      "url": "http://2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion/",
+      "title": "Tor Project | Anonymity Online",
+      "response_time": 7.53,
+      "page_size": 23012
+    }
+  },
+  "detection_result": {
+    "is_clone": false,
+    "similarity_score": 0.1571,
+    "threshold": 0.85,
+    "verdict": "✅ Different Sites",
+    "feature_scores": {
+      "structure_hash": 0.0,
+      "css_fingerprint": 0.0,
+      "form_fingerprint": 0.16666666666666666,
+      "tag_density": 0.631578947368421,
+      "script_fingerprint": 0.0,
+      "meta_fingerprint": 0.21176470588235297,
+      "link_pattern": 0.0,
+      "hidden_elements": 1.0
+    },
+    "breakdown": [
+      {
+        "feature": "tag_density",
+        "raw_score": 0.6316,
+        "weight": 0.1,
+        "weighted_score": 0.0632,
+        "explanation": "Page depth match",
+        "indicator": "🟡 MED"
+      },
+      {
+        "feature": "hidden_elements",
+        "raw_score": 1.0,
+        "weight": 0.05,
+        "weighted_score": 0.05,
+        "explanation": "Hidden elements match",
+        "indicator": "🔴 HIGH"
+      },
+      {
+        "feature": "form_fingerprint",
+        "raw_score": 0.1667,
+        "weight": 0.2,
+        "weighted_score": 0.0333,
+        "explanation": "Form fields match",
+        "indicator": "🟢 LOW"
+      },
+      {
+        "feature": "meta_fingerprint",
+        "raw_score": 0.2118,
+        "weight": 0.05,
+        "weighted_score": 0.0106,
+        "explanation": "Meta tags match",
+        "indicator": "🟢 LOW"
+      },
+      {
+        "feature": "structure_hash",
+        "raw_score": 0.0,
+        "weight": 0.25,
+        "weighted_score": 0.0,
+        "explanation": "HTML structure match",
+        "indicator": "🟢 LOW"
+      },
+      {
+        "feature": "css_fingerprint",
+        "raw_score": 0.0,
+        "weight": 0.15,
+        "weighted_score": 0.0,
+        "explanation": "CSS classes/IDs match",
+        "indicator": "🟢 LOW"
+      },
+      {
+        "feature": "script_fingerprint",
+        "raw_score": 0.0,
+        "weight": 0.1,
+        "weighted_score": 0.0,
+        "explanation": "JavaScript files match",
+        "indicator": "🟢 LOW"
+      },
+      {
+        "feature": "link_pattern",
+        "raw_score": 0.0,
+        "weight": 0.1,
+        "weighted_score": 0.0,
+        "explanation": "Navigation links match",
+        "indicator": "🟢 LOW"
+      }
+    ]
+  },
+  "summary": {
+    "risk_level": "LOW",
+    "is_clone": false,
+    "similarity": "15.7%",
+    "message": "Sites appear to be structurally different."
+  }
+}

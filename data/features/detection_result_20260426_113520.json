@@ -1,0 +1,84 @@
+{
+  "is_clone": true,
+  "similarity_score": 1.0,
+  "threshold": 0.85,
+  "verdict": "⚠️ CLONE DETECTED",
+  "feature_scores": {
+    "structure_hash": 1.0,
+    "css_fingerprint": 1.0,
+    "form_fingerprint": 1.0,
+    "tag_density": 1.0,
+    "script_fingerprint": 1.0,
+    "meta_fingerprint": 1.0,
+    "link_pattern": 1.0,
+    "hidden_elements": 1.0
+  },
+  "breakdown": [
+    {
+      "feature": "structure_hash",
+      "raw_score": 1.0,
+      "weight": 0.25,
+      "weighted_score": 0.25,
+      "explanation": "HTML structure match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "form_fingerprint",
+      "raw_score": 1.0,
+      "weight": 0.2,
+      "weighted_score": 0.2,
+      "explanation": "Form fields match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "css_fingerprint",
+      "raw_score": 1.0,
+      "weight": 0.15,
+      "weighted_score": 0.15,
+      "explanation": "CSS classes/IDs match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "tag_density",
+      "raw_score": 1.0,
+      "weight": 0.1,
+      "weighted_score": 0.1,
+      "explanation": "Page depth match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "script_fingerprint",
+      "raw_score": 1.0,
+      "weight": 0.1,
+      "weighted_score": 0.1,
+      "explanation": "JavaScript files match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "link_pattern",
+      "raw_score": 1.0,
+      "weight": 0.1,
+      "weighted_score": 0.1,
+      "explanation": "Navigation links match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "meta_fingerprint",
+      "raw_score": 1.0,
+      "weight": 0.05,
+      "weighted_score": 0.05,
+      "explanation": "Meta tags match",
+      "indicator": "🔴 HIGH"
+    },
+    {
+      "feature": "hidden_elements",
+      "raw_score": 1.0,
+      "weight": 0.05,
+      "weighted_score": 0.05,
+      "explanation": "Hidden elements match",
+      "indicator": "🔴 HIGH"
+    }
+  ],
+  "original_url": "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/",
+  "suspect_url": "https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/"
+}
