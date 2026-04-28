@@ -288,10 +288,10 @@ markdown
 
 | Name | Role |
 |------|------|
-| **G Eswar** | Project Lead, Dark Web Crawler & Web Dashboard |
-| **P Tejaswi** | Feature Extraction Module |
-| **P Bhavya** | Clone Detection Model |
-| **Sarvari Khatoon** | Report Generation & Documentation |
+| **G Eswar** |
+| **P Tejaswi** | 
+| **P Bhavya** | 
+| **Sarvari Khatoon** | 
 
 *Detection of Clone Dark Web Websites - Academic Project*
 To Update:
